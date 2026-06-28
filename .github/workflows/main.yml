@@ -12,3 +12,9 @@ jobs:
     steps:
       - name: Print a message
         run: echo "I am M. Moriarty, the Master of Crime"
+      - name : Checkout
+        uses: actions/checkout@v7.0.0
+       - name: workspace show
+        run: "ls -la "
+        
+  
