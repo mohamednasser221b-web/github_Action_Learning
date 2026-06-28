@@ -1,0 +1,14 @@
+name: moriarty_runner
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  example-job:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Print a message
+        run: echo "I am M. Moriarty, the Master of Crime"
