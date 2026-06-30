@@ -1,21 +1,28 @@
 name: moriarty_runner
-
 on:
   push:
     branches:
       - main
-
 jobs:
-  example-job:
-    runs-on: ubuntu-latest
+  test:
+    runs-on: self-hosted
 
     steps:
-      - name: Print a message
-        run: echo "I am M. Moriarty, the Master of Crime"
+      - name: Start
+        run: echo "Test begun"
 
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Show workspace
-        run: ls -la
-  
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run tests
+        run: npm test
+
+      - name: SonarQube Scan
+        # Example if using the SonarQube GitHub Action
+        uses: SonarSource/sonarqube-scan-action@v5
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}       
