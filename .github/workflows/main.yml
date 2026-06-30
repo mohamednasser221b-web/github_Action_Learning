@@ -1,15 +1,17 @@
 name: moriarty_runner
+
 on:
   push:
     branches:
       - main
+
 jobs:
   test:
     runs-on: self-hosted
 
     steps:
       - name: Start
-        run: echo "Test begun"
+        run: echo "Pipeline started"
 
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -21,8 +23,20 @@ jobs:
         run: npm test
 
       - name: SonarQube Scan
-        # Example if using the SonarQube GitHub Action
         uses: SonarSource/sonarqube-scan-action@v5
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}       
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+
+      - name: Set build tag
+        id: vars
+        run: echo "TAG=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+
+      - name: Build application
+        run: npm run build
+
+      - name: Publish artifact to Nexus
+        run: |
+          curl -u ${{ secrets.NEXUS_USERNAME }}:${{ secrets.NEXUS_PASSWORD }} \
+            --upload-file ./dist/moriarty-app.zip \
+            "http://localhost:8081/repository/moriarty-releases/moriarty-app-${{ steps.vars.outputs.TAG }}.zip"
