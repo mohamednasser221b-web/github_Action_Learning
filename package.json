@@ -2,7 +2,8 @@
   "name": "pipeline-demo",
   "version": "1.0.0",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "build": "mkdir -p dist && zip -r dist/moriarty-app.zip src/ package.json"
   },
   "devDependencies": {
     "jest": "^29.7.0"
